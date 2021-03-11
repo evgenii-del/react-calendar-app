@@ -1,11 +1,10 @@
-import User from "./user";
-
+import User from './user';
 
 class Admin extends User {
-    constructor(id, name) {
-        super(id, name);
-        this.isAdmin = true;
-    }
+  constructor(id, name) {
+    super(id, name);
+    this.isAdmin = true;
+  }
 }
 
 export default Admin;

@@ -1,24 +1,24 @@
 class EventEmitter {
-    constructor() {
-        this.events = {};
+  constructor() {
+    this.events = {};
+  }
+
+  subscribe(eventName, fn) {
+    if (!this.events[eventName]) {
+      this.events[eventName] = [];
     }
 
-    subscribe(eventName, fn) {
-        if (!this.events[eventName]) {
-            this.events[eventName] = [];
-        }
+    this.events[eventName].push(fn);
+  }
 
-        this.events[eventName].push(fn);
+  emit(eventName, data) {
+    const event = this.events[eventName];
+    if (event) {
+      event.forEach((fn) => {
+        fn.call(null, data);
+      });
     }
-
-    emit(eventName, data) {
-        const event = this.events[eventName];
-        if (event) {
-            event.forEach((fn) => {
-                fn.call(null, data);
-            });
-        }
-    }
+  }
 }
 
 export default EventEmitter;
