@@ -28,7 +28,11 @@ function Main() {
                 <TimeList/>
                 <div className="app__content">
                     <DayList/>
-                    <div className="calendar js-calendar"/>
+                    <div className="calendar js-calendar">
+                        {
+                            Array(45).fill(0).map((_, index) => <div className="calendar__item" key={index}/>)
+                        }
+                    </div>
                 </div>
             </div>
         </main>
