@@ -9,18 +9,25 @@ import LoginPopup from './components/LoginPopup';
 function App() {
   const overlayRef = useRef();
   const formPopup = useRef();
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [calendarData, setCalendarData] = useState([]);
+  const [isAdmin, setIsAdmin] = useState(true);
 
   return (
     <div className="App">
       <div className="wrapper">
-        <Main isAdmin={isAdmin} formPopup={formPopup} overlayRef={overlayRef} />
+        <Main
+          calendarData={calendarData}
+          setCalendarData={setCalendarData}
+          isAdmin={isAdmin}
+          formPopup={formPopup}
+          overlayRef={overlayRef}
+        />
       </div>
       <ErrorPopup />
       <FormPopup formPopup={formPopup} overlayRef={overlayRef} />
       <ConfirmationPopup />
       <LoginPopup overlayRef={overlayRef} setIsAdmin={setIsAdmin} />
-      <div className="overlay overlay_active" ref={overlayRef} />
+      <div className="overlay" ref={overlayRef} />
     </div>
   );
 }

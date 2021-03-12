@@ -1,15 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import axios from 'axios';
 
 import TimeList from './TimeList';
 import DayList from './DayList';
 
+const timesArr = [10, 11, 12, 13, 14, 15, 16, 17, 18];
+const daysArr = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+
 function Main(props) {
-  const { isAdmin, formPopup, overlayRef } = props;
+  const {
+    calendarData, setCalendarData, isAdmin, formPopup, overlayRef,
+  } = props;
 
   const handleOpenFormPopup = () => {
     formPopup.current.classList.add('popup_active');
     overlayRef.current.classList.add('overlay_active');
   };
+
+  useEffect(() => {
+    axios.get('http://158.101.166.74:8080/api/data/evgenii_khasanov/events').then((response) => {
+      const parsedData = response.data.map((item) => ({ id: item.id, data: JSON.parse(item.data) }));
+      setCalendarData(parsedData);
+    });
+  }, []);
 
   return (
     <main className="app">
@@ -37,8 +50,21 @@ function Main(props) {
           <DayList />
           <div className="calendar">
             {
-              // eslint-disable-next-line react/no-array-index-key
-              Array(45).fill(0).map((_, index) => <div className="calendar__item" key={index} />)
+              timesArr.map((time) => daysArr.map((day) => {
+                const fullDate = `${time}-${day}`;
+                const event = calendarData.find((item) => item.data.date === fullDate);
+
+                if (event) {
+                  const { color, date, title } = event.data;
+                  return (
+                    <div className={`calendar__item ${color}`} data-id={date} key={fullDate}>
+                      <p className="calendar__item-text">{title}</p>
+                    </div>
+                  );
+                }
+
+                return <div className="calendar__item" key={fullDate} />;
+              }))
             }
           </div>
         </div>
