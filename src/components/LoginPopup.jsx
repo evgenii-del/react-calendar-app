@@ -1,11 +1,34 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
+import User from '../assets/user';
+import Admin from '../assets/admin';
 
-function LoginPopup() {
+const userNames = ['John', 'Sam', 'Ann', 'Thomas'];
+const users = [
+  ...userNames.map((name, index) => new User(index + 1, name)),
+  new Admin(5, 'Eve'),
+];
+
+function LoginPopup(props) {
+  const { overlayRef, setIsAdmin } = props;
+  const [selectedUser, setSelectedUser] = useState('1');
+  const loginPopupRef = useRef();
+
+  const handleChangeUser = ({ target }) => {
+    setSelectedUser(target.value);
+  };
+
+  const handleOnClick = () => {
+    const isAdminParam = users.find(({ id }) => id === +selectedUser).isAdmin;
+    setIsAdmin(isAdminParam);
+    overlayRef.current.classList.remove('overlay_active');
+    loginPopupRef.current.classList.remove('popup_active');
+  };
+
   return (
-    <form className="popup js-popup_login popup_active">
+    <form className="popup popup_active" ref={loginPopupRef}>
       <label htmlFor="loginMembers">
         <div className="select app__header-select">
-          <select className="select__inner js-auth-select" name="loginMembers">
+          <select className="select__inner js-auth-select" name="loginMembers" value={selectedUser} onChange={handleChangeUser}>
             <option value="1" defaultValue>John</option>
             <option value="2">Sam</option>
             <option value="3">Ann</option>
@@ -13,7 +36,7 @@ function LoginPopup() {
             <option value="5">Eve</option>
           </select>
         </div>
-        <button className="popup__btn" type="button">Confirm</button>
+        <button className="popup__btn" type="button" onClick={handleOnClick}>Confirm</button>
       </label>
     </form>
   );

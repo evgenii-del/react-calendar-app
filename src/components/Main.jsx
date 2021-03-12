@@ -3,7 +3,14 @@ import React from 'react';
 import TimeList from './TimeList';
 import DayList from './DayList';
 
-function Main() {
+function Main(props) {
+  const { isAdmin, formPopup, overlayRef } = props;
+
+  const handleOpenFormPopup = () => {
+    formPopup.current.classList.add('popup_active');
+    overlayRef.current.classList.add('overlay_active');
+  };
+
   return (
     <main className="app">
       <div className="app__header">
@@ -11,7 +18,7 @@ function Main() {
         <div className="app__header-buttons">
           <label htmlFor="filterByMembers">
             <div className="select app__header-select">
-              <select className="select__inner js-members" name="filterByMembers">
+              <select className="select__inner" name="filterByMembers">
                 <option value="all" defaultValue>All members</option>
                 <option value="1">John</option>
                 <option value="2">Sam</option>
@@ -21,16 +28,14 @@ function Main() {
               </select>
             </div>
           </label>
-          <button className="app__header-button js-open-popup" type="button">
-            New event
-          </button>
+          {isAdmin && <button className="app__header-button" type="button" onClick={handleOpenFormPopup}>New event</button>}
         </div>
       </div>
       <div className="app__body">
         <TimeList />
         <div className="app__content">
           <DayList />
-          <div className="calendar js-calendar">
+          <div className="calendar">
             {
               // eslint-disable-next-line react/no-array-index-key
               Array(45).fill(0).map((_, index) => <div className="calendar__item" key={index} />)

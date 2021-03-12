@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 
 import Main from './components/Main';
 import ErrorPopup from './components/ErrorPopup';
@@ -7,16 +7,20 @@ import ConfirmationPopup from './components/ConfirmationPopup';
 import LoginPopup from './components/LoginPopup';
 
 function App() {
+  const overlayRef = useRef();
+  const formPopup = useRef();
+  const [isAdmin, setIsAdmin] = useState(false);
+
   return (
     <div className="App">
       <div className="wrapper">
-        <Main />
+        <Main isAdmin={isAdmin} formPopup={formPopup} overlayRef={overlayRef} />
       </div>
       <ErrorPopup />
-      <FormPopup />
+      <FormPopup formPopup={formPopup} overlayRef={overlayRef} />
       <ConfirmationPopup />
-      <LoginPopup />
-      <div className="overlay overlay_active js-overlay" />
+      <LoginPopup overlayRef={overlayRef} setIsAdmin={setIsAdmin} />
+      <div className="overlay overlay_active" ref={overlayRef} />
     </div>
   );
 }
