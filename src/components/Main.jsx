@@ -9,17 +9,27 @@ const daysArr = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
 function Main(props) {
   const {
-    calendarData, setCalendarData, isAdmin, formPopup, overlayRef,
+    calendarData, setCalendarData, isAdmin, formPopup, overlayRef, confirmPopup, confirmPopupTitle, confirmPopupBtn,
   } = props;
 
-  const handleOpenFormPopup = () => {
+  const handleOpenPopup = () => {
     formPopup.current.classList.add('popup_active');
     overlayRef.current.classList.add('overlay_active');
   };
 
+  const selectEvent = ({ target }) => {
+    if (target.classList.contains('reserved')) {
+      const event = calendarData.find((item) => item.data.date === target.dataset.id);
+      confirmPopupTitle.current.innerText = event.data.title;
+      confirmPopupBtn.current.dataset.id = target.dataset.id;
+      confirmPopup.current.classList.add('popup_active');
+      overlayRef.current.classList.add('overlay_active');
+    }
+  };
+
   useEffect(() => {
     axios.get('http://158.101.166.74:8080/api/data/evgenii_khasanov/events').then((response) => {
-      const parsedData = response.data.map((item) => ({ id: item.id, data: JSON.parse(item.data) }));
+      const parsedData = response.data && response.data.map((item) => ({ id: item.id, data: JSON.parse(item.data) }));
       setCalendarData(parsedData);
     });
   }, []);
@@ -41,7 +51,7 @@ function Main(props) {
               </select>
             </div>
           </label>
-          {isAdmin && <button className="app__header-button" type="button" onClick={handleOpenFormPopup}>New event</button>}
+          {isAdmin && <button className="app__header-button" type="button" onClick={handleOpenPopup}>New event</button>}
         </div>
       </div>
       <div className="app__body">
@@ -52,12 +62,12 @@ function Main(props) {
             {
               timesArr.map((time) => daysArr.map((day) => {
                 const fullDate = `${time}-${day}`;
-                const event = calendarData.find((item) => item.data.date === fullDate);
+                const event = calendarData && calendarData.find((item) => item.data.date === fullDate);
 
                 if (event) {
                   const { color, date, title } = event.data;
                   return (
-                    <div className={`calendar__item ${color}`} data-id={date} key={fullDate}>
+                    <div className={`calendar__item ${color} ${isAdmin ? 'reserved' : ''}`} data-id={date} key={fullDate} onClick={selectEvent}>
                       <p className="calendar__item-text">{title}</p>
                     </div>
                   );

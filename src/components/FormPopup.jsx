@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 function FormPopup(props) {
   const { formPopup, overlayRef } = props;
@@ -36,6 +37,16 @@ function FormPopup(props) {
 
   const handleSubmitForm = (event) => {
     event.preventDefault();
+
+    const newEvent = {
+      date: `${time}-${day}`,
+      title,
+      participants,
+      color,
+    };
+
+    const data = JSON.stringify({ data: JSON.stringify(newEvent) });
+    axios.post('http://158.101.166.74:8080/api/data/evgenii_khasanov/events', data);
   };
 
   return (

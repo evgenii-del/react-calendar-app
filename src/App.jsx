@@ -9,6 +9,9 @@ import LoginPopup from './components/LoginPopup';
 function App() {
   const overlayRef = useRef();
   const formPopup = useRef();
+  const confirmPopup = useRef();
+  const confirmPopupTitle = useRef();
+  const confirmPopupBtn = useRef();
   const [calendarData, setCalendarData] = useState([]);
   const [isAdmin, setIsAdmin] = useState(true);
 
@@ -21,11 +24,14 @@ function App() {
           isAdmin={isAdmin}
           formPopup={formPopup}
           overlayRef={overlayRef}
+          confirmPopup={confirmPopup}
+          confirmPopupTitle={confirmPopupTitle}
+          confirmPopupBtn={confirmPopupBtn}
         />
       </div>
       <ErrorPopup />
       <FormPopup formPopup={formPopup} overlayRef={overlayRef} />
-      <ConfirmationPopup />
+      <ConfirmationPopup calendarData={calendarData} confirmPopup={confirmPopup} confirmPopupTitle={confirmPopupTitle} confirmPopupBtn={confirmPopupBtn} overlayRef={overlayRef} />
       <LoginPopup overlayRef={overlayRef} setIsAdmin={setIsAdmin} />
       <div className="overlay" ref={overlayRef} />
     </div>
