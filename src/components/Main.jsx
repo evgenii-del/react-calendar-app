@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import TimeList from './TimeList';
 import DayList from './DayList';
@@ -7,6 +7,7 @@ const timesArr = [10, 11, 12, 13, 14, 15, 16, 17, 18];
 const daysArr = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
 function Main(props) {
+  const [selectedMember, setSelectedMember] = useState('all');
   const {
     calendarData, isAdmin, formPopup, overlayRef, confirmPopup, confirmPopupTitle, confirmPopupBtn, fetchCalendarData
   } = props;
@@ -29,6 +30,10 @@ function Main(props) {
     }
   };
 
+  const handleChangeMember = ({ target }) => {
+    setSelectedMember(target.value);
+  };
+
   useEffect(() => {
     fetchCalendarData();
   }, []);
@@ -40,8 +45,8 @@ function Main(props) {
         <div className="app__header-buttons">
           <label htmlFor="filterByMembers">
             <div className="select app__header-select">
-              <select className="select__inner" name="filterByMembers">
-                <option value="all" defaultValue>All members</option>
+              <select className="select__inner" name="filterByMembers" value={selectedMember} onChange={handleChangeMember}>
+                <option value="all">All members</option>
                 <option value="1">John</option>
                 <option value="2">Sam</option>
                 <option value="3">Ann</option>
@@ -64,12 +69,16 @@ function Main(props) {
                 const event = calendarData && calendarData.find((item) => item.data.date === fullDate);
 
                 if (event) {
-                  const { color, date, title } = event.data;
-                  return (
-                    <div className={`calendar__item ${color} ${isAdmin ? 'reserved' : ''}`} data-id={date} key={fullDate} onClick={selectEvent}>
-                      <p className="calendar__item-text">{title}</p>
-                    </div>
-                  );
+                  const { color, date, title, participants } = event.data;
+
+                  if (selectedMember === 'all' || participants.includes(selectedMember)) {
+                    return (
+                      <div className={`calendar__item ${color} ${isAdmin ? 'reserved' : ''}`}
+                           data-id={date} key={fullDate} onClick={selectEvent}>
+                        <p className="calendar__item-text">{title}</p>
+                      </div>
+                    );
+                  }
                 }
 
                 return <div className="calendar__item" key={fullDate} />;

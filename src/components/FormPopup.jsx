@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 function FormPopup(props) {
-  const { formPopup, overlayRef, fetchCalendarData } = props;
+  const { formPopup, overlayRef, fetchCalendarData, errorPopup } = props;
   const [title, setTitle] = useState('');
   const [participants, setParticipants] = useState([]);
   const [time, setTime] = useState('10');
@@ -12,6 +12,11 @@ function FormPopup(props) {
   const handleCloseFormPopup = () => {
     formPopup.current.classList.remove('popup_active');
     overlayRef.current.classList.remove('overlay_active');
+    errorPopup.current.classList.remove('popup_active');
+  };
+
+  const handleShowErrorPopup = () => {
+    errorPopup.current.classList.add('popup_active');
   };
 
   const handleChangeTitle = ({ target }) => {

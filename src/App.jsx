@@ -8,21 +8,28 @@ import ConfirmationPopup from './components/ConfirmationPopup';
 import LoginPopup from './components/LoginPopup';
 
 function App() {
-  const overlayRef = useRef();
+  const overlay = useRef();
   const formPopup = useRef();
   const confirmPopup = useRef();
   const confirmPopupTitle = useRef();
   const confirmPopupBtn = useRef();
+  const errorPopup = useRef();
   const [calendarData, setCalendarData] = useState([]);
   const [isAdmin, setIsAdmin] = useState(true);
-  // const [selectedDate, setSelectedDate] = useState('');
 
   const fetchCalendarData = () => {
     axios.get('http://158.101.166.74:8080/api/data/evgenii_khasanov/events').then((response) => {
       const parsedData = response.data && response.data.map((item) => ({ id: item.id, data: JSON.parse(item.data) }));
       setCalendarData(parsedData);
     });
-  }
+  };
+
+  const overlayClick = () => {
+    formPopup.current.classList.remove('popup_active');
+    overlay.current.classList.remove('overlay_active');
+    errorPopup.current.classList.remove('popup_active');
+    confirmPopup.current.classList.remove('popup_active');
+  };
 
   return (
     <div className="App">
@@ -31,24 +38,28 @@ function App() {
           calendarData={calendarData}
           isAdmin={isAdmin}
           formPopup={formPopup}
-          overlayRef={overlayRef}
+          overlayRef={overlay}
           confirmPopup={confirmPopup}
           confirmPopupTitle={confirmPopupTitle}
           confirmPopupBtn={confirmPopupBtn}
           fetchCalendarData={fetchCalendarData}
         />
       </div>
-      <ErrorPopup />
-      <FormPopup formPopup={formPopup} overlayRef={overlayRef} fetchCalendarData={fetchCalendarData} />
+      <ErrorPopup errorPopup={errorPopup} />
+      <FormPopup
+        formPopup={formPopup}
+        overlayRef={overlay}
+        fetchCalendarData={fetchCalendarData}
+        errorPopup={errorPopup} />
       <ConfirmationPopup
         calendarData={calendarData}
         confirmPopup={confirmPopup}
         confirmPopupTitle={confirmPopupTitle}
         confirmPopupBtn={confirmPopupBtn}
-        overlayRef={overlayRef}
+        overlayRef={overlay}
         fetchCalendarData={fetchCalendarData} />
-      <LoginPopup overlayRef={overlayRef} setIsAdmin={setIsAdmin} />
-      <div className="overlay" ref={overlayRef} />
+      <LoginPopup overlayRef={overlay} setIsAdmin={setIsAdmin} />
+      <div className="overlay" ref={overlay} onClick={overlayClick} />
     </div>
   );
 }
