@@ -7,7 +7,7 @@ function FormPopup(props) {
   const [participants, setParticipants] = useState([]);
   const [time, setTime] = useState('10');
   const [day, setDay] = useState('Monday');
-  const [color, setColor] = useState('red');
+  const [color, setColor] = useState('green');
 
   const handleCloseFormPopup = () => {
     formPopup.current.classList.remove('popup_active');
@@ -119,84 +119,85 @@ function FormPopup(props) {
       </label>
       <ul className="popup__colors">
         <li className="popup__colors-item">
-          <label className="check option" htmlFor="color">
+          <label className="check option">
             <input
               className="check__input visually-hidden"
               value="yellow"
-              checked={color === 'yellow'}
-              onChange={handleChangeColor}
               type="radio"
               name="color"
+              checked={color === 'yellow'}
+              onChange={handleChangeColor}
             />
-            <span className="check__box yellow" />
+            <span className="check__box yellow"/>
           </label>
         </li>
         <li className="popup__colors-item">
-          <label className="check option" htmlFor="color">
+          <label className="check option">
             <input
               className="check__input visually-hidden"
               value="green"
-              checked={color === 'green'}
-              onChange={handleChangeColor}
               type="radio"
               name="color"
+              checked={color === 'green'}
+              onChange={handleChangeColor}
             />
-            <span className="check__box green" />
+            <span className="check__box green"/>
           </label>
         </li>
         <li className="popup__colors-item">
-          <label className="check option" htmlFor="color">
+          <label className="check option">
             <input
               className="check__input visually-hidden"
               value="red"
-              checked={color === 'red'}
-              onChange={handleChangeColor}
               type="radio"
               name="color"
+              checked={color === 'red'}
+              onChange={handleChangeColor}
             />
-            <span className="check__box red" />
+            <span className="check__box red"/>
           </label>
         </li>
         <li className="popup__colors-item">
-          <label className="check option" htmlFor="color">
+          <label className="check option">
             <input
               className="check__input visually-hidden"
               value="khaki"
-              checked={color === 'khaki'}
-              onChange={handleChangeColor}
               type="radio"
               name="color"
+              checked={color === 'khaki'}
+              onChange={handleChangeColor}
             />
-            <span className="check__box khaki" />
+            <span className="check__box khaki"/>
           </label>
         </li>
         <li className="popup__colors-item">
-          <label className="check option" htmlFor="color">
+          <label className="check option">
             <input
               className="check__input visually-hidden"
               value="violet"
-              checked={color === 'violet'}
-              onChange={handleChangeColor}
               type="radio"
               name="color"
+              checked={color === 'violet'}
+              onChange={handleChangeColor}
             />
-            <span className="check__box violet" />
+            <span className="check__box violet"/>
           </label>
         </li>
         <li className="popup__colors-item">
-          <label className="check option" htmlFor="color">
+          <label className="check option">
             <input
               className="check__input visually-hidden"
               value="blue"
-              checked={color === 'blue'}
-              onChange={handleChangeColor}
               type="radio"
               name="color"
+              checked={color === 'blue'}
+              onChange={handleChangeColor}
             />
-            <span className="check__box blue" />
+            <span className="check__box blue"/>
           </label>
         </li>
       </ul>
+
       <button className="popup__btn" type="submit">Create</button>
     </form>
   );

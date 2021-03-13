@@ -15,7 +15,7 @@ function App() {
   const confirmPopupBtn = useRef();
   const errorPopup = useRef();
   const [calendarData, setCalendarData] = useState([]);
-  const [isAdmin, setIsAdmin] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const fetchCalendarData = () => {
     axios.get('http://158.101.166.74:8080/api/data/evgenii_khasanov/events').then((response) => {
@@ -59,7 +59,7 @@ function App() {
         overlayRef={overlay}
         fetchCalendarData={fetchCalendarData} />
       <LoginPopup overlayRef={overlay} setIsAdmin={setIsAdmin} />
-      <div className="overlay" ref={overlay} onClick={overlayClick} />
+      <div className="overlay overlay_active" ref={overlay} onClick={overlayClick} />
     </div>
   );
 }
