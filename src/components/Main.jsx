@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import axios from 'axios';
 
 import TimeList from './TimeList';
 import DayList from './DayList';
@@ -9,7 +8,7 @@ const daysArr = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
 function Main(props) {
   const {
-    calendarData, setCalendarData, isAdmin, formPopup, overlayRef, confirmPopup, confirmPopupTitle, confirmPopupBtn,
+    calendarData, isAdmin, formPopup, overlayRef, confirmPopup, confirmPopupTitle, confirmPopupBtn, fetchCalendarData
   } = props;
 
   const handleOpenPopup = () => {
@@ -20,18 +19,18 @@ function Main(props) {
   const selectEvent = ({ target }) => {
     if (target.classList.contains('reserved')) {
       const event = calendarData.find((item) => item.data.date === target.dataset.id);
+
       confirmPopupTitle.current.innerText = event.data.title;
-      confirmPopupBtn.current.dataset.id = target.dataset.id;
+      confirmPopupBtn.current.dataset.id = event.id;
+
+
       confirmPopup.current.classList.add('popup_active');
       overlayRef.current.classList.add('overlay_active');
     }
   };
 
   useEffect(() => {
-    axios.get('http://158.101.166.74:8080/api/data/evgenii_khasanov/events').then((response) => {
-      const parsedData = response.data && response.data.map((item) => ({ id: item.id, data: JSON.parse(item.data) }));
-      setCalendarData(parsedData);
-    });
+    fetchCalendarData();
   }, []);
 
   return (

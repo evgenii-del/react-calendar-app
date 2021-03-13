@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 function FormPopup(props) {
-  const { formPopup, overlayRef } = props;
+  const { formPopup, overlayRef, fetchCalendarData } = props;
   const [title, setTitle] = useState('');
   const [participants, setParticipants] = useState([]);
   const [time, setTime] = useState('10');
@@ -46,7 +46,10 @@ function FormPopup(props) {
     };
 
     const data = JSON.stringify({ data: JSON.stringify(newEvent) });
-    axios.post('http://158.101.166.74:8080/api/data/evgenii_khasanov/events', data);
+    axios.post('http://158.101.166.74:8080/api/data/evgenii_khasanov/events', data).then(() => {
+      handleCloseFormPopup();
+      fetchCalendarData();
+    });
   };
 
   return (

@@ -3,7 +3,7 @@ import axios from 'axios';
 
 function ConfirmationPopup(props) {
   const {
-    calendarData, confirmPopup, confirmPopupTitle, confirmPopupBtn, overlayRef,
+    confirmPopup, confirmPopupTitle, confirmPopupBtn, overlayRef, fetchCalendarData
   } = props;
 
   const handleClosePopup = () => {
@@ -12,10 +12,11 @@ function ConfirmationPopup(props) {
   };
 
   const handleDeleteEvent = ({ target }) => {
-    const date = target.dataset.id;
-    const { id } = calendarData.find((item) => item.data.date = date);
-
-    axios.delete(`http://158.101.166.74:8080/api/data/evgenii_khasanov/events/${id}`);
+    const id = target.dataset.id;
+    axios.delete(`http://158.101.166.74:8080/api/data/evgenii_khasanov/events/${id}`).then(() => {
+      handleClosePopup();
+      fetchCalendarData();
+    });
   };
 
   return (
