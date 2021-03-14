@@ -15,7 +15,7 @@ function App() {
   const confirmPopupBtn = useRef();
   const errorPopup = useRef();
   const [calendarData, setCalendarData] = useState([]);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(true);
 
   const fetchCalendarData = () => {
     axios.get('http://158.101.166.74:8080/api/data/evgenii_khasanov/events').then((response) => {
@@ -48,6 +48,7 @@ function App() {
       </div>
       <ErrorPopup errorPopup={errorPopup} />
       <FormPopup
+        calendarData={calendarData}
         formPopup={formPopup}
         overlayRef={overlay}
         fetchCalendarData={fetchCalendarData}
@@ -62,7 +63,7 @@ function App() {
         fetchCalendarData={fetchCalendarData}
       />
       <LoginPopup overlayRef={overlay} setIsAdmin={setIsAdmin} />
-      <div className="overlay overlay_active" ref={overlay} onClick={isAdmin ? overlayClick : undefined} aria-hidden="true" />
+      <div className="overlay" ref={overlay} onClick={isAdmin ? overlayClick : undefined} aria-hidden="true" />
     </div>
   );
 }

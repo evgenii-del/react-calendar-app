@@ -1,15 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+
+const VALID_LENGTH = 3;
 
 function FormPopup(props) {
   const {
-    formPopup, overlayRef, fetchCalendarData, errorPopup,
+    calendarData, formPopup, overlayRef, fetchCalendarData, errorPopup,
   } = props;
   const [title, setTitle] = useState('');
+  const [titleError, setTitleError] = useState(true);
   const [participants, setParticipants] = useState([]);
+  const [participantsError, setParticipantsError] = useState(true);
   const [time, setTime] = useState('10');
   const [day, setDay] = useState('Monday');
-  const [color, setColor] = useState('green');
+  const [dateError, setDateError] = useState(true);
+  const [color, setColor] = useState('yellow');
 
   const handleCloseFormPopup = () => {
     formPopup.current.classList.remove('popup_active');
@@ -17,25 +22,36 @@ function FormPopup(props) {
     errorPopup.current.classList.remove('popup_active');
   };
 
-  // eslint-disable-next-line no-unused-vars
   const handleShowErrorPopup = () => {
     errorPopup.current.classList.add('popup_active');
   };
 
   const handleChangeTitle = ({ target }) => {
+    const validLength = target.value.length <= VALID_LENGTH;
+    setTitleError(validLength);
     setTitle(target.value);
   };
 
   const handleChangeParticipants = ({ target }) => {
     const values = Array.from(target.selectedOptions, (option) => option.value);
+    setParticipantsError(!values.length);
     setParticipants(values);
   };
 
+  const dateValidation = (date) => {
+    const isReservedDate = calendarData.filter((event) => event.data.date === date);
+    setDateError(!!isReservedDate.length);
+  };
+
   const handleChangeTime = ({ target }) => {
+    const date = `${target.value}-${day}`;
+    dateValidation(date);
     setTime(target.value);
   };
 
   const handleChangeDay = ({ target }) => {
+    const date = `${time}-${target.value}`;
+    dateValidation(date);
     setDay(target.value);
   };
 
@@ -43,22 +59,43 @@ function FormPopup(props) {
     setColor(target.value);
   };
 
+  const handleResetForm = () => {
+    setTitle('');
+    setParticipants([]);
+    setTime('10');
+    setDay('Monday');
+    setColor('yellow');
+
+    setTitleError(true);
+    setParticipantsError(true);
+  };
+
   const handleSubmitForm = (event) => {
     event.preventDefault();
 
-    const newEvent = {
-      date: `${time}-${day}`,
-      title,
-      participants,
-      color,
-    };
+    if (titleError || participantsError || dateError) {
+      handleShowErrorPopup();
+    } else {
+      const newEvent = {
+        date: `${time}-${day}`,
+        title,
+        participants,
+        color,
+      };
 
-    const data = JSON.stringify({ data: JSON.stringify(newEvent) });
-    axios.post('http://158.101.166.74:8080/api/data/evgenii_khasanov/events', data).then(() => {
-      handleCloseFormPopup();
-      fetchCalendarData();
-    });
+      const data = JSON.stringify({ data: JSON.stringify(newEvent) });
+      axios.post('http://158.101.166.74:8080/api/data/evgenii_khasanov/events', data).then(() => {
+        handleCloseFormPopup();
+        fetchCalendarData();
+        handleResetForm();
+      });
+    }
   };
+
+  useEffect(() => {
+    const date = `${time}-${day}`;
+    dateValidation(date);
+  }, [calendarData]);
 
   return (
     <form className="popup" ref={formPopup} onSubmit={handleSubmitForm}>
@@ -200,7 +237,6 @@ function FormPopup(props) {
           </label>
         </li>
       </ul>
-
       <button className="popup__btn" type="submit">Create</button>
     </form>
   );

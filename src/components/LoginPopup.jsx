@@ -26,7 +26,7 @@ function LoginPopup(props) {
   };
 
   return (
-    <form className="popup popup_active" ref={loginPopupRef}>
+    <form className="popup" ref={loginPopupRef}>
       <label htmlFor="loginMembers">
         <div className="select app__header-select">
           <select className="select__inner js-auth-select" name="loginMembers" value={selectedUser} onChange={handleChangeUser}>
