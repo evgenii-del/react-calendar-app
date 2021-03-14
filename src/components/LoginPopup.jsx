@@ -11,7 +11,7 @@ const users = [
 ];
 
 function LoginPopup(props) {
-  const { overlayRef } = props;
+  const { setIsOverlayOpen } = props;
   const { setIsAdmin } = useContext(Context);
   const [selectedUser, setSelectedUser] = useState('1');
   const loginPopup = useRef();
@@ -23,7 +23,7 @@ function LoginPopup(props) {
   const handleOnClick = () => {
     const isAdminParam = users.find(({ id }) => id === +selectedUser).isAdmin;
     setIsAdmin(isAdminParam);
-    overlayRef.current.classList.remove('overlay_active');
+    setIsOverlayOpen(false);
     loginPopup.current.classList.remove('popup_active');
   };
 

@@ -3,27 +3,37 @@ import axios from 'axios';
 
 const ConfirmationPopup = React.memo((props) => {
   const {
-    confirmPopup, confirmPopupTitle, confirmPopupBtn, overlayRef, fetchCalendarData,
+    isConfirmPopupOpen,
+    setIsConfirmPopupOpen,
+    confirmTitle,
+    selectedEventId,
+    setIsOverlayOpen,
+    fetchCalendarData,
   } = props;
 
   const handleClosePopup = () => {
-    confirmPopup.current.classList.remove('popup_active');
-    overlayRef.current.classList.remove('overlay_active');
+    setIsConfirmPopupOpen(false);
+    setIsOverlayOpen(false);
   };
 
-  const handleDeleteEvent = ({ target }) => {
-    const { id } = target.dataset;
-    axios.delete(`http://158.101.166.74:8080/api/data/evgenii_khasanov/events/${id}`).then(() => {
+  const handleDeleteEvent = () => {
+    axios.delete(`http://158.101.166.74:8080/api/data/evgenii_khasanov/events/${selectedEventId}`).then(() => {
       handleClosePopup();
       fetchCalendarData();
     });
   };
 
   return (
-    <div className="popup popup_confirmation" ref={confirmPopup}>
+    <div className={`popup popup_confirmation ${isConfirmPopupOpen ? 'popup_active' : undefined}`}>
       <button className="popup__close" type="button" aria-label="Close popup" onClick={handleClosePopup} />
-      <p className="popup__text" ref={confirmPopupTitle} />
-      <button className="popup__btn" type="button" ref={confirmPopupBtn} onClick={handleDeleteEvent}>Yes</button>
+      <p className="popup__text">
+        Are you sure you want to delete
+        &quot;
+        {confirmTitle}
+        &quot;
+        event?
+      </p>
+      <button className="popup__btn" type="button" onClick={handleDeleteEvent}>Yes</button>
     </div>
   );
 });

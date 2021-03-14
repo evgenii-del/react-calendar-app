@@ -1,20 +1,23 @@
-import React, { useRef, useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import axios from 'axios';
 
-import Main from './components/Main';
-import ErrorPopup from './components/ErrorPopup';
-import FormPopup from './components/FormPopup';
-import ConfirmationPopup from './components/ConfirmationPopup';
-import LoginPopup from './components/LoginPopup';
+import {
+  ConfirmationPopup,
+  ErrorPopup,
+  FormPopup,
+  LoginPopup,
+  Main,
+} from './components';
 import Context from './context';
 
 function App() {
-  const overlay = useRef();
-  const formPopup = useRef();
-  const confirmPopup = useRef();
-  const confirmPopupTitle = useRef();
-  const confirmPopupBtn = useRef();
-  const errorPopup = useRef();
+  const [isOverlayOpen, setIsOverlayOpen] = useState(true);
+  const [isFormPopupOpen, setIsFormPopupOpen] = useState(false);
+  const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false);
+  const [isErrorPopupOpen, setIsErrorPopupOpen] = useState(false);
+
+  const [confirmTitle, setConfirmTitle] = useState('');
+  const [selectedEventId, setSelectedEventId] = useState('');
 
   const [calendarData, setCalendarData] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -28,10 +31,10 @@ function App() {
   }, []);
 
   const overlayClick = () => {
-    formPopup.current.classList.remove('popup_active');
-    overlay.current.classList.remove('overlay_active');
-    errorPopup.current.classList.remove('popup_active');
-    confirmPopup.current.classList.remove('popup_active');
+    setIsFormPopupOpen(false);
+    setIsOverlayOpen(false);
+    setIsErrorPopupOpen(false);
+    setIsConfirmPopupOpen(false);
   };
 
   return (
@@ -40,32 +43,34 @@ function App() {
         <div className="wrapper">
           <Main
             calendarData={calendarData}
-            formPopup={formPopup}
-            overlayRef={overlay}
-            confirmPopup={confirmPopup}
-            confirmPopupTitle={confirmPopupTitle}
-            confirmPopupBtn={confirmPopupBtn}
+            setIsFormPopupOpen={setIsFormPopupOpen}
+            setIsOverlayOpen={setIsOverlayOpen}
+            setIsConfirmPopupOpen={setIsConfirmPopupOpen}
+            setConfirmTitle={setConfirmTitle}
+            setSelectedEventId={setSelectedEventId}
             fetchCalendarData={fetchCalendarData}
           />
         </div>
-        <ErrorPopup errorPopup={errorPopup} />
+        <ErrorPopup isErrorPopupOpen={isErrorPopupOpen} />
         <FormPopup
           calendarData={calendarData}
-          formPopup={formPopup}
-          overlayRef={overlay}
+          isFormPopupOpen={isFormPopupOpen}
+          setIsFormPopupOpen={setIsFormPopupOpen}
+          setIsOverlayOpen={setIsOverlayOpen}
           fetchCalendarData={fetchCalendarData}
-          errorPopup={errorPopup}
+          setIsErrorPopupOpen={setIsErrorPopupOpen}
         />
         <ConfirmationPopup
           calendarData={calendarData}
-          confirmPopup={confirmPopup}
-          confirmPopupTitle={confirmPopupTitle}
-          confirmPopupBtn={confirmPopupBtn}
-          overlayRef={overlay}
+          isConfirmPopupOpen={isConfirmPopupOpen}
+          setIsConfirmPopupOpen={setIsConfirmPopupOpen}
+          confirmTitle={confirmTitle}
+          selectedEventId={selectedEventId}
+          setIsOverlayOpen={setIsOverlayOpen}
           fetchCalendarData={fetchCalendarData}
         />
-        <LoginPopup overlayRef={overlay} />
-        <div className="overlay overlay_active" ref={overlay} onClick={isAdmin ? overlayClick : undefined} aria-hidden="true" />
+        <LoginPopup setIsOverlayOpen={setIsOverlayOpen} />
+        <div className={`overlay ${isOverlayOpen ? 'overlay_active' : undefined}`} onClick={isAdmin ? overlayClick : undefined} aria-hidden="true" />
       </div>
     </Context.Provider>
   );

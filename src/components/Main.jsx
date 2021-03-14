@@ -2,8 +2,7 @@ import React, {
   useEffect, useState, useContext, useMemo,
 } from 'react';
 
-import TimeList from './TimeList';
-import DayList from './DayList';
+import { DayList, TimeList } from './index';
 import Context from '../context';
 
 const timesArr = [10, 11, 12, 13, 14, 15, 16, 17, 18];
@@ -13,29 +12,29 @@ function Main(props) {
   const [selectedMember, setSelectedMember] = useState('all');
   const {
     calendarData,
-    formPopup,
-    overlayRef,
-    confirmPopup,
-    confirmPopupTitle,
-    confirmPopupBtn,
+    setIsFormPopupOpen,
+    setIsOverlayOpen,
+    setIsConfirmPopupOpen,
+    setConfirmTitle,
+    setSelectedEventId,
     fetchCalendarData,
   } = props;
   const { isAdmin } = useContext(Context);
 
   const handleOpenPopup = () => {
-    formPopup.current.classList.add('popup_active');
-    overlayRef.current.classList.add('overlay_active');
+    setIsFormPopupOpen(true);
+    setIsOverlayOpen(true);
   };
 
   const selectEvent = ({ target }) => {
     if (target.classList.contains('reserved')) {
       const event = calendarData.find((item) => item.data.date === target.dataset.id);
 
-      confirmPopupTitle.current.innerText = `Are you sure you want to delete "${event.data.title}" event?`;
-      confirmPopupBtn.current.dataset.id = event.id;
+      setConfirmTitle(event.data.title);
+      setSelectedEventId(event.id);
 
-      confirmPopup.current.classList.add('popup_active');
-      overlayRef.current.classList.add('overlay_active');
+      setIsConfirmPopupOpen(true);
+      setIsOverlayOpen(true);
     }
   };
 

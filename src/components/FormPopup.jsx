@@ -5,7 +5,12 @@ const VALID_LENGTH = 3;
 
 const FormPopup = React.memo((props) => {
   const {
-    calendarData, formPopup, overlayRef, fetchCalendarData, errorPopup,
+    calendarData,
+    isFormPopupOpen,
+    setIsFormPopupOpen,
+    setIsOverlayOpen,
+    fetchCalendarData,
+    setIsErrorPopupOpen,
   } = props;
   const [title, setTitle] = useState('');
   const [titleError, setTitleError] = useState(true);
@@ -17,13 +22,13 @@ const FormPopup = React.memo((props) => {
   const [color, setColor] = useState('yellow');
 
   const handleCloseFormPopup = () => {
-    formPopup.current.classList.remove('popup_active');
-    overlayRef.current.classList.remove('overlay_active');
-    errorPopup.current.classList.remove('popup_active');
+    setIsFormPopupOpen(false);
+    setIsOverlayOpen(false);
+    setIsErrorPopupOpen(false);
   };
 
   const handleShowErrorPopup = () => {
-    errorPopup.current.classList.add('popup_active');
+    setIsErrorPopupOpen(true);
   };
 
   const handleChangeTitle = ({ target }) => {
@@ -98,7 +103,7 @@ const FormPopup = React.memo((props) => {
   }, [calendarData]);
 
   return (
-    <form className="popup" ref={formPopup} onSubmit={handleSubmitForm}>
+    <form className={`popup ${isFormPopupOpen ? 'popup_active' : undefined}`} onSubmit={handleSubmitForm}>
       <button className="popup__close" type="button" aria-label="Close popup" onClick={handleCloseFormPopup} />
       <label className="popup__label" htmlFor="title">
         <input
