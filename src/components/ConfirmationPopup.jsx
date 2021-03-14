@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 
-function ConfirmationPopup(props) {
+const ConfirmationPopup = React.memo((props) => {
   const {
     confirmPopup, confirmPopupTitle, confirmPopupBtn, overlayRef, fetchCalendarData,
   } = props;
@@ -26,6 +26,6 @@ function ConfirmationPopup(props) {
       <button className="popup__btn" type="button" ref={confirmPopupBtn} onClick={handleDeleteEvent}>Yes</button>
     </div>
   );
-}
+});
 
 export default ConfirmationPopup;

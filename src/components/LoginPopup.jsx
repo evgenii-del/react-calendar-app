@@ -1,7 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 
-import User from '../assets/user';
-import Admin from '../assets/admin';
+import User from '../utils/user';
+import Admin from '../utils/admin';
+import Context from '../context';
 
 const userNames = ['John', 'Sam', 'Ann', 'Thomas'];
 const users = [
@@ -10,9 +11,10 @@ const users = [
 ];
 
 function LoginPopup(props) {
-  const { overlayRef, setIsAdmin } = props;
+  const { overlayRef } = props;
+  const { setIsAdmin } = useContext(Context);
   const [selectedUser, setSelectedUser] = useState('1');
-  const loginPopupRef = useRef();
+  const loginPopup = useRef();
 
   const handleChangeUser = ({ target }) => {
     setSelectedUser(target.value);
@@ -22,11 +24,11 @@ function LoginPopup(props) {
     const isAdminParam = users.find(({ id }) => id === +selectedUser).isAdmin;
     setIsAdmin(isAdminParam);
     overlayRef.current.classList.remove('overlay_active');
-    loginPopupRef.current.classList.remove('popup_active');
+    loginPopup.current.classList.remove('popup_active');
   };
 
   return (
-    <form className="popup" ref={loginPopupRef}>
+    <form className="popup popup_active" ref={loginPopup}>
       <label htmlFor="loginMembers">
         <div className="select app__header-select">
           <select className="select__inner js-auth-select" name="loginMembers" value={selectedUser} onChange={handleChangeUser}>

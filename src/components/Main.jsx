@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+  useEffect, useState, useContext, useMemo,
+} from 'react';
 
 import TimeList from './TimeList';
 import DayList from './DayList';
+import Context from '../context';
 
 const timesArr = [10, 11, 12, 13, 14, 15, 16, 17, 18];
 const daysArr = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
@@ -10,7 +13,6 @@ function Main(props) {
   const [selectedMember, setSelectedMember] = useState('all');
   const {
     calendarData,
-    isAdmin,
     formPopup,
     overlayRef,
     confirmPopup,
@@ -18,6 +20,7 @@ function Main(props) {
     confirmPopupBtn,
     fetchCalendarData,
   } = props;
+  const { isAdmin } = useContext(Context);
 
   const handleOpenPopup = () => {
     formPopup.current.classList.add('popup_active');
@@ -28,7 +31,7 @@ function Main(props) {
     if (target.classList.contains('reserved')) {
       const event = calendarData.find((item) => item.data.date === target.dataset.id);
 
-      confirmPopupTitle.current.innerText = event.data.title;
+      confirmPopupTitle.current.innerText = `Are you sure you want to delete "${event.data.title}" event?`;
       confirmPopupBtn.current.dataset.id = event.id;
 
       confirmPopup.current.classList.add('popup_active');
@@ -39,6 +42,34 @@ function Main(props) {
   const handleChangeMember = ({ target }) => {
     setSelectedMember(target.value);
   };
+
+  const renderEvents = useMemo(() => timesArr.map((time) => daysArr.map((day) => {
+    const fullDate = `${time}-${day}`;
+    const event = calendarData
+      && calendarData.find((item) => item.data.date === fullDate);
+
+    if (event) {
+      const {
+        color, date, title, participants,
+      } = event.data;
+
+      if (selectedMember === 'all' || participants.includes(selectedMember)) {
+        return (
+          <div
+            className={`calendar__item ${color} ${isAdmin ? 'reserved' : ''}`}
+            data-id={date}
+            key={fullDate}
+            onClick={selectEvent}
+            aria-hidden="true"
+          >
+            <p className="calendar__item-text">{title}</p>
+          </div>
+        );
+      }
+    }
+
+    return <div className="calendar__item" key={fullDate} />;
+  })), [calendarData, selectedMember, isAdmin]);
 
   useEffect(() => {
     fetchCalendarData();
@@ -68,37 +99,7 @@ function Main(props) {
         <TimeList />
         <div className="app__content">
           <DayList />
-          <div className="calendar">
-            {
-              timesArr.map((time) => daysArr.map((day) => {
-                const fullDate = `${time}-${day}`;
-                const event = calendarData
-                  && calendarData.find((item) => item.data.date === fullDate);
-
-                if (event) {
-                  const {
-                    color, date, title, participants,
-                  } = event.data;
-
-                  if (selectedMember === 'all' || participants.includes(selectedMember)) {
-                    return (
-                      <div
-                        className={`calendar__item ${color} ${isAdmin ? 'reserved' : ''}`}
-                        data-id={date}
-                        key={fullDate}
-                        onClick={selectEvent}
-                        aria-hidden="true"
-                      >
-                        <p className="calendar__item-text">{title}</p>
-                      </div>
-                    );
-                  }
-                }
-
-                return <div className="calendar__item" key={fullDate} />;
-              }))
-            }
-          </div>
+          <div className="calendar">{ renderEvents }</div>
         </div>
       </div>
     </main>

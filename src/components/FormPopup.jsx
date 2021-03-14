@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const VALID_LENGTH = 3;
 
-function FormPopup(props) {
+const FormPopup = React.memo((props) => {
   const {
     calendarData, formPopup, overlayRef, fetchCalendarData, errorPopup,
   } = props;
@@ -240,6 +240,6 @@ function FormPopup(props) {
       <button className="popup__btn" type="submit">Create</button>
     </form>
   );
-}
+});
 
 export default FormPopup;
