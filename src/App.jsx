@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import axios from "axios"
+import axios from 'axios';
 
 import Main from './components/Main';
 import ErrorPopup from './components/ErrorPopup';
@@ -19,7 +19,8 @@ function App() {
 
   const fetchCalendarData = () => {
     axios.get('http://158.101.166.74:8080/api/data/evgenii_khasanov/events').then((response) => {
-      const parsedData = response.data && response.data.map((item) => ({ id: item.id, data: JSON.parse(item.data) }));
+      const { data } = response;
+      const parsedData = data && data.map((item) => ({ id: item.id, data: JSON.parse(item.data) }));
       setCalendarData(parsedData);
     });
   };
@@ -50,16 +51,18 @@ function App() {
         formPopup={formPopup}
         overlayRef={overlay}
         fetchCalendarData={fetchCalendarData}
-        errorPopup={errorPopup} />
+        errorPopup={errorPopup}
+      />
       <ConfirmationPopup
         calendarData={calendarData}
         confirmPopup={confirmPopup}
         confirmPopupTitle={confirmPopupTitle}
         confirmPopupBtn={confirmPopupBtn}
         overlayRef={overlay}
-        fetchCalendarData={fetchCalendarData} />
+        fetchCalendarData={fetchCalendarData}
+      />
       <LoginPopup overlayRef={overlay} setIsAdmin={setIsAdmin} />
-      <div className="overlay overlay_active" ref={overlay} onClick={overlayClick} />
+      <div className="overlay overlay_active" ref={overlay} onClick={isAdmin ? overlayClick : undefined} aria-hidden="true" />
     </div>
   );
 }

@@ -3,7 +3,7 @@ import axios from 'axios';
 
 function ConfirmationPopup(props) {
   const {
-    confirmPopup, confirmPopupTitle, confirmPopupBtn, overlayRef, fetchCalendarData
+    confirmPopup, confirmPopupTitle, confirmPopupBtn, overlayRef, fetchCalendarData,
   } = props;
 
   const handleClosePopup = () => {
@@ -12,7 +12,7 @@ function ConfirmationPopup(props) {
   };
 
   const handleDeleteEvent = ({ target }) => {
-    const id = target.dataset.id;
+    const { id } = target.dataset;
     axios.delete(`http://158.101.166.74:8080/api/data/evgenii_khasanov/events/${id}`).then(() => {
       handleClosePopup();
       fetchCalendarData();

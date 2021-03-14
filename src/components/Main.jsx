@@ -9,7 +9,14 @@ const daysArr = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 function Main(props) {
   const [selectedMember, setSelectedMember] = useState('all');
   const {
-    calendarData, isAdmin, formPopup, overlayRef, confirmPopup, confirmPopupTitle, confirmPopupBtn, fetchCalendarData
+    calendarData,
+    isAdmin,
+    formPopup,
+    overlayRef,
+    confirmPopup,
+    confirmPopupTitle,
+    confirmPopupBtn,
+    fetchCalendarData,
   } = props;
 
   const handleOpenPopup = () => {
@@ -23,7 +30,6 @@ function Main(props) {
 
       confirmPopupTitle.current.innerText = event.data.title;
       confirmPopupBtn.current.dataset.id = event.id;
-
 
       confirmPopup.current.classList.add('popup_active');
       overlayRef.current.classList.add('overlay_active');
@@ -66,15 +72,23 @@ function Main(props) {
             {
               timesArr.map((time) => daysArr.map((day) => {
                 const fullDate = `${time}-${day}`;
-                const event = calendarData && calendarData.find((item) => item.data.date === fullDate);
+                const event = calendarData
+                  && calendarData.find((item) => item.data.date === fullDate);
 
                 if (event) {
-                  const { color, date, title, participants } = event.data;
+                  const {
+                    color, date, title, participants,
+                  } = event.data;
 
                   if (selectedMember === 'all' || participants.includes(selectedMember)) {
                     return (
-                      <div className={`calendar__item ${color} ${isAdmin ? 'reserved' : ''}`}
-                           data-id={date} key={fullDate} onClick={selectEvent}>
+                      <div
+                        className={`calendar__item ${color} ${isAdmin ? 'reserved' : ''}`}
+                        data-id={date}
+                        key={fullDate}
+                        onClick={selectEvent}
+                        aria-hidden="true"
+                      >
                         <p className="calendar__item-text">{title}</p>
                       </div>
                     );

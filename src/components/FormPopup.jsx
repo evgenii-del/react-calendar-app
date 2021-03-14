@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 function FormPopup(props) {
-  const { formPopup, overlayRef, fetchCalendarData, errorPopup } = props;
+  const {
+    formPopup, overlayRef, fetchCalendarData, errorPopup,
+  } = props;
   const [title, setTitle] = useState('');
   const [participants, setParticipants] = useState([]);
   const [time, setTime] = useState('10');
@@ -15,6 +17,7 @@ function FormPopup(props) {
     errorPopup.current.classList.remove('popup_active');
   };
 
+  // eslint-disable-next-line no-unused-vars
   const handleShowErrorPopup = () => {
     errorPopup.current.classList.add('popup_active');
   };
@@ -128,7 +131,7 @@ function FormPopup(props) {
               checked={color === 'yellow'}
               onChange={handleChangeColor}
             />
-            <span className="check__box yellow"/>
+            <span className="check__box yellow" />
           </label>
         </li>
         <li className="popup__colors-item">
@@ -141,7 +144,7 @@ function FormPopup(props) {
               checked={color === 'green'}
               onChange={handleChangeColor}
             />
-            <span className="check__box green"/>
+            <span className="check__box green" />
           </label>
         </li>
         <li className="popup__colors-item">
@@ -154,7 +157,7 @@ function FormPopup(props) {
               checked={color === 'red'}
               onChange={handleChangeColor}
             />
-            <span className="check__box red"/>
+            <span className="check__box red" />
           </label>
         </li>
         <li className="popup__colors-item">
@@ -167,7 +170,7 @@ function FormPopup(props) {
               checked={color === 'khaki'}
               onChange={handleChangeColor}
             />
-            <span className="check__box khaki"/>
+            <span className="check__box khaki" />
           </label>
         </li>
         <li className="popup__colors-item">
@@ -180,7 +183,7 @@ function FormPopup(props) {
               checked={color === 'violet'}
               onChange={handleChangeColor}
             />
-            <span className="check__box violet"/>
+            <span className="check__box violet" />
           </label>
         </li>
         <li className="popup__colors-item">
@@ -193,7 +196,7 @@ function FormPopup(props) {
               checked={color === 'blue'}
               onChange={handleChangeColor}
             />
-            <span className="check__box blue"/>
+            <span className="check__box blue" />
           </label>
         </li>
       </ul>
