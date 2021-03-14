@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import axios from 'axios';
 
-const ConfirmationPopup = React.memo((props) => {
+import Context from '../context';
+
+const ConfirmationPopup = React.memo(() => {
   const {
     isConfirmPopupOpen,
     setIsConfirmPopupOpen,
@@ -9,7 +11,7 @@ const ConfirmationPopup = React.memo((props) => {
     selectedEventId,
     setIsOverlayOpen,
     fetchCalendarData,
-  } = props;
+  } = useContext(Context);
 
   const handleClosePopup = () => {
     setIsConfirmPopupOpen(false);

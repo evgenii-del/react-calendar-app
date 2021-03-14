@@ -8,9 +8,9 @@ import Context from '../context';
 const timesArr = [10, 11, 12, 13, 14, 15, 16, 17, 18];
 const daysArr = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
-function Main(props) {
-  const [selectedMember, setSelectedMember] = useState('all');
+function Main() {
   const {
+    isAdmin,
     calendarData,
     setIsFormPopupOpen,
     setIsOverlayOpen,
@@ -18,8 +18,8 @@ function Main(props) {
     setConfirmTitle,
     setSelectedEventId,
     fetchCalendarData,
-  } = props;
-  const { isAdmin } = useContext(Context);
+  } = useContext(Context);
+  const [selectedMember, setSelectedMember] = useState('all');
 
   const handleOpenPopup = () => {
     setIsFormPopupOpen(true);

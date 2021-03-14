@@ -38,37 +38,30 @@ function App() {
   };
 
   return (
-    <Context.Provider value={{ isAdmin, setIsAdmin }}>
+    <Context.Provider value={{
+      isAdmin,
+      setIsAdmin,
+      calendarData,
+      isFormPopupOpen,
+      setIsFormPopupOpen,
+      setIsOverlayOpen,
+      isConfirmPopupOpen,
+      setIsConfirmPopupOpen,
+      confirmTitle,
+      setConfirmTitle,
+      selectedEventId,
+      setSelectedEventId,
+      setIsErrorPopupOpen,
+      fetchCalendarData,
+    }}
+    >
       <div className="App">
         <div className="wrapper">
-          <Main
-            calendarData={calendarData}
-            setIsFormPopupOpen={setIsFormPopupOpen}
-            setIsOverlayOpen={setIsOverlayOpen}
-            setIsConfirmPopupOpen={setIsConfirmPopupOpen}
-            setConfirmTitle={setConfirmTitle}
-            setSelectedEventId={setSelectedEventId}
-            fetchCalendarData={fetchCalendarData}
-          />
+          <Main />
         </div>
         <ErrorPopup isErrorPopupOpen={isErrorPopupOpen} />
-        <FormPopup
-          calendarData={calendarData}
-          isFormPopupOpen={isFormPopupOpen}
-          setIsFormPopupOpen={setIsFormPopupOpen}
-          setIsOverlayOpen={setIsOverlayOpen}
-          fetchCalendarData={fetchCalendarData}
-          setIsErrorPopupOpen={setIsErrorPopupOpen}
-        />
-        <ConfirmationPopup
-          calendarData={calendarData}
-          isConfirmPopupOpen={isConfirmPopupOpen}
-          setIsConfirmPopupOpen={setIsConfirmPopupOpen}
-          confirmTitle={confirmTitle}
-          selectedEventId={selectedEventId}
-          setIsOverlayOpen={setIsOverlayOpen}
-          fetchCalendarData={fetchCalendarData}
-        />
+        <FormPopup />
+        <ConfirmationPopup />
         <LoginPopup setIsOverlayOpen={setIsOverlayOpen} />
         <div className={`overlay ${isOverlayOpen ? 'overlay_active' : undefined}`} onClick={isAdmin ? overlayClick : undefined} aria-hidden="true" />
       </div>
