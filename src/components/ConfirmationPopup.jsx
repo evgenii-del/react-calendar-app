@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
-import axios from 'axios';
 
 import Context from '../context';
 
 const ConfirmationPopup = React.memo(() => {
   const {
+    server,
     isConfirmPopupOpen,
     setIsConfirmPopupOpen,
     confirmTitle,
@@ -19,7 +19,7 @@ const ConfirmationPopup = React.memo(() => {
   };
 
   const handleDeleteEvent = () => {
-    axios.delete(`http://158.101.166.74:8080/api/data/evgenii_khasanov/events/${selectedEventId}`).then(() => {
+    server.removeEvent(selectedEventId).then(() => {
       handleClosePopup();
       fetchCalendarData();
     });

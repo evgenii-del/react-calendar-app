@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
 import Context from '../context';
 
 const VALID_LENGTH = 3;
 
 const FormPopup = React.memo(() => {
   const {
+    server,
     calendarData,
     isFormPopupOpen,
     setIsFormPopupOpen,
@@ -90,7 +90,7 @@ const FormPopup = React.memo(() => {
       };
 
       const data = JSON.stringify({ data: JSON.stringify(newEvent) });
-      axios.post('http://158.101.166.74:8080/api/data/evgenii_khasanov/events', data).then(() => {
+      server.createEvent(data).then(() => {
         handleCloseFormPopup();
         fetchCalendarData();
         handleResetForm();

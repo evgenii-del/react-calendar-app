@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from 'react';
-import axios from 'axios';
 
 import {
   ConfirmationPopup,
@@ -9,8 +8,10 @@ import {
   Main,
 } from './components';
 import Context from './context';
+import Server from './utils/server';
 
 function App() {
+  const server = new Server('http://158.101.166.74:8080/api/data/', 'evgenii_khasanov', 'events');
   const [isOverlayOpen, setIsOverlayOpen] = useState(true);
   const [isFormPopupOpen, setIsFormPopupOpen] = useState(false);
   const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false);
@@ -23,7 +24,7 @@ function App() {
   const [isAdmin, setIsAdmin] = useState(false);
 
   const fetchCalendarData = useCallback(() => {
-    axios.get('http://158.101.166.74:8080/api/data/evgenii_khasanov/events').then((response) => {
+    server.fetchEvents().then((response) => {
       const { data } = response;
       const parsedData = data && data.map((item) => ({ id: item.id, data: JSON.parse(item.data) }));
       setCalendarData(parsedData);
@@ -39,6 +40,7 @@ function App() {
 
   return (
     <Context.Provider value={{
+      server,
       isAdmin,
       setIsAdmin,
       calendarData,
