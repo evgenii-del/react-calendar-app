@@ -1,5 +1,6 @@
-import React, { useState, useCallback } from 'react';
-import { createStore } from 'redux';
+import React, { useState } from 'react';
+import { applyMiddleware, createStore } from 'redux';
+import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 
 import {
@@ -15,8 +16,7 @@ import calendarReducer from './store/reducers';
 
 const store = createStore(
   calendarReducer,
-  // eslint-disable-next-line no-underscore-dangle
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+  applyMiddleware(thunk),
 );
 
 const App = () => {
@@ -29,16 +29,7 @@ const App = () => {
   const [confirmTitle, setConfirmTitle] = useState('');
   const [selectedEventId, setSelectedEventId] = useState('');
 
-  const [calendarData, setCalendarData] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
-
-  const fetchCalendarData = useCallback(() => {
-    server.fetchEvents().then((response) => {
-      const { data } = response;
-      const parsedData = data && data.map((item) => ({ id: item.id, data: JSON.parse(item.data) }));
-      setCalendarData(parsedData);
-    });
-  }, []);
 
   const overlayClick = () => {
     setIsFormPopupOpen(false);
@@ -53,7 +44,6 @@ const App = () => {
         server,
         isAdmin,
         setIsAdmin,
-        calendarData,
         isFormPopupOpen,
         setIsFormPopupOpen,
         setIsOverlayOpen,
@@ -64,7 +54,6 @@ const App = () => {
         selectedEventId,
         setSelectedEventId,
         setIsErrorPopupOpen,
-        fetchCalendarData,
       }}
       >
         <div className="App">

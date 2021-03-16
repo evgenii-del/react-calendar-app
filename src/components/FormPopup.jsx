@@ -1,16 +1,19 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import Context from '../context';
+import { getCalendarData } from '../store/actions';
 
 const VALID_LENGTH = 3;
 
 const FormPopup = React.memo(() => {
+  const calendarData = useSelector((state) => state.calendar.data);
+  const dispatch = useDispatch();
   const {
     server,
-    calendarData,
     isFormPopupOpen,
     setIsFormPopupOpen,
     setIsOverlayOpen,
-    fetchCalendarData,
     setIsErrorPopupOpen,
   } = useContext(Context);
   const [title, setTitle] = useState('');
@@ -92,7 +95,7 @@ const FormPopup = React.memo(() => {
       const data = JSON.stringify({ data: JSON.stringify(newEvent) });
       server.createEvent(data).then(() => {
         handleCloseFormPopup();
-        fetchCalendarData();
+        dispatch(getCalendarData());
         handleResetForm();
       });
     }

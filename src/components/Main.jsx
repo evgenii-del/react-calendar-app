@@ -1,23 +1,26 @@
 import React, {
   useEffect, useState, useContext, useMemo,
 } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { DayList, TimeList } from './index';
 import Context from '../context';
+import { getCalendarData } from '../store/actions';
+import HeaderButtons from './HeaderButtons';
 
 const timesArr = [10, 11, 12, 13, 14, 15, 16, 17, 18];
 const daysArr = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
 const Main = () => {
+  const calendarData = useSelector((state) => state.calendar.data);
+  const dispatch = useDispatch();
   const {
     isAdmin,
-    calendarData,
     setIsFormPopupOpen,
     setIsOverlayOpen,
     setIsConfirmPopupOpen,
     setConfirmTitle,
     setSelectedEventId,
-    fetchCalendarData,
   } = useContext(Context);
   const [selectedMember, setSelectedMember] = useState('all');
 
@@ -71,28 +74,20 @@ const Main = () => {
   })), [calendarData, selectedMember, isAdmin]);
 
   useEffect(() => {
-    fetchCalendarData();
+    dispatch(getCalendarData());
   }, []);
 
   return (
     <main className="app">
       <div className="app__header">
         <h1 className="app__header-title">Calendar</h1>
-        <div className="app__header-buttons">
-          <label htmlFor="filterByMembers">
-            <div className="select app__header-select">
-              <select className="select__inner" name="filterByMembers" value={selectedMember} onChange={handleChangeMember}>
-                <option value="all">All members</option>
-                <option value="1">John</option>
-                <option value="2">Sam</option>
-                <option value="3">Ann</option>
-                <option value="4">Thomas</option>
-                <option value="5">Eve</option>
-              </select>
-            </div>
-          </label>
-          {isAdmin && <button className="app__header-button" type="button" onClick={handleOpenPopup}>New event</button>}
-        </div>
+        {isAdmin && (
+        <HeaderButtons
+          selectedMember={selectedMember}
+          handleChangeMember={handleChangeMember}
+          handleOpenPopup={handleOpenPopup}
+        />
+        )}
       </div>
       <div className="app__body">
         <TimeList />

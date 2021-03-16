@@ -1,8 +1,11 @@
 import React, { useContext } from 'react';
+import { useDispatch } from 'react-redux';
 
 import Context from '../context';
+import { getCalendarData } from '../store/actions';
 
 const ConfirmationPopup = React.memo(() => {
+  const dispatch = useDispatch();
   const {
     server,
     isConfirmPopupOpen,
@@ -10,7 +13,6 @@ const ConfirmationPopup = React.memo(() => {
     confirmTitle,
     selectedEventId,
     setIsOverlayOpen,
-    fetchCalendarData,
   } = useContext(Context);
 
   const handleClosePopup = () => {
@@ -21,7 +23,7 @@ const ConfirmationPopup = React.memo(() => {
   const handleDeleteEvent = () => {
     server.removeEvent(selectedEventId).then(() => {
       handleClosePopup();
-      fetchCalendarData();
+      dispatch(getCalendarData());
     });
   };
 
