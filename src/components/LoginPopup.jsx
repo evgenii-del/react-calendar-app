@@ -10,7 +10,7 @@ const users = [
   new Admin(5, 'Eve'),
 ];
 
-function LoginPopup(props) {
+const LoginPopup = (props) => {
   const { setIsOverlayOpen } = props;
   const { setIsAdmin } = useContext(Context);
   const [selectedUser, setSelectedUser] = useState('1');
@@ -43,6 +43,6 @@ function LoginPopup(props) {
       </label>
     </form>
   );
-}
+};
 
 export default LoginPopup;

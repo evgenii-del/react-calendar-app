@@ -1,6 +1,6 @@
 import React from 'react';
 
-function ErrorPopup(props) {
+const ErrorPopup = (props) => {
   const { isErrorPopupOpen } = props;
 
   return (
@@ -8,6 +8,6 @@ function ErrorPopup(props) {
       <p>The defaultValue time is already taken or you entered too short a title</p>
     </div>
   );
-}
+};
 
 export default ErrorPopup;

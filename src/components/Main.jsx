@@ -8,7 +8,7 @@ import Context from '../context';
 const timesArr = [10, 11, 12, 13, 14, 15, 16, 17, 18];
 const daysArr = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
-function Main() {
+const Main = () => {
   const {
     isAdmin,
     calendarData,
@@ -103,6 +103,6 @@ function Main() {
       </div>
     </main>
   );
-}
+};
 
 export default Main;

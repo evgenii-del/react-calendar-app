@@ -10,7 +10,7 @@ import {
 import Context from './context';
 import Server from './utils/server';
 
-function App() {
+const App = () => {
   const server = new Server('http://158.101.166.74:8080/api/data/', 'evgenii_khasanov', 'events');
   const [isOverlayOpen, setIsOverlayOpen] = useState(true);
   const [isFormPopupOpen, setIsFormPopupOpen] = useState(false);
@@ -69,6 +69,6 @@ function App() {
       </div>
     </Context.Provider>
   );
-}
+};
 
 export default App;
