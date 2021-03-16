@@ -8,14 +8,12 @@ import Context from '../context';
 import { getCalendarData } from '../store/actions';
 import HeaderButtons from './HeaderButtons';
 
-const timesArr = [10, 11, 12, 13, 14, 15, 16, 17, 18];
-const daysArr = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-
 const Main = () => {
-  const calendarData = useSelector((state) => state.calendar.data);
+  const { calendar, user } = useSelector((state) => state);
   const dispatch = useDispatch();
   const {
-    isAdmin,
+    timesArr,
+    daysArr,
     setIsFormPopupOpen,
     setIsOverlayOpen,
     setIsConfirmPopupOpen,
@@ -31,7 +29,7 @@ const Main = () => {
 
   const selectEvent = ({ target }) => {
     if (target.classList.contains('reserved')) {
-      const event = calendarData.find((item) => item.data.date === target.dataset.id);
+      const event = calendar.data.find((item) => item.data.date === target.dataset.id);
 
       setConfirmTitle(event.data.title);
       setSelectedEventId(event.id);
@@ -47,8 +45,8 @@ const Main = () => {
 
   const renderEvents = useMemo(() => timesArr.map((time) => daysArr.map((day) => {
     const fullDate = `${time}-${day}`;
-    const event = calendarData
-      && calendarData.find((item) => item.data.date === fullDate);
+    const event = calendar.data
+      && calendar.data.find((item) => item.data.date === fullDate);
 
     if (event) {
       const {
@@ -58,7 +56,7 @@ const Main = () => {
       if (selectedMember === 'all' || participants.includes(selectedMember)) {
         return (
           <div
-            className={`calendar__item ${color} ${isAdmin ? 'reserved' : ''}`}
+            className={`calendar__item ${color} ${user.isAdmin ? 'reserved' : ''}`}
             data-id={date}
             key={fullDate}
             onClick={selectEvent}
@@ -71,7 +69,7 @@ const Main = () => {
     }
 
     return <div className="calendar__item" key={fullDate} />;
-  })), [calendarData, selectedMember, isAdmin]);
+  })), [calendar.data, selectedMember, user.isAdmin]);
 
   useEffect(() => {
     dispatch(getCalendarData());
@@ -81,7 +79,7 @@ const Main = () => {
     <main className="app">
       <div className="app__header">
         <h1 className="app__header-title">Calendar</h1>
-        {isAdmin && (
+        {user.isAdmin && (
         <HeaderButtons
           selectedMember={selectedMember}
           handleChangeMember={handleChangeMember}

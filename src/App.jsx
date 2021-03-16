@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { applyMiddleware, createStore } from 'redux';
-import thunk from 'redux-thunk';
-import { Provider } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import {
   ConfirmationPopup,
@@ -12,15 +10,30 @@ import {
 } from './components';
 import Context from './context';
 import Server from './utils/server';
-import calendarReducer from './store/reducers';
+import User from './utils/user';
+import Admin from './utils/admin';
 
-const store = createStore(
-  calendarReducer,
-  applyMiddleware(thunk),
-);
+const timesArr = [10, 11, 12, 13, 14, 15, 16, 17, 18];
+const daysArr = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+const userNames = ['John', 'Sam', 'Ann', 'Thomas'];
+const users = [
+  ...userNames.map((name, index) => new User(index + 1, name)),
+  new Admin(5, 'Eve (Admin)'),
+];
+const VALID_LENGTH = 3;
+const colors = [
+  { name: 'yellow', id: 1 },
+  { name: 'green', id: 2 },
+  { name: 'red', id: 3 },
+  { name: 'khaki', id: 4 },
+  { name: 'violet', id: 5 },
+  { name: 'blue', id: 6 },
+];
 
 const App = () => {
+  const { isAdmin } = useSelector((state) => state.user.isAdmin);
   const server = new Server('http://158.101.166.74:8080/api/data/', 'evgenii_khasanov', 'events');
+
   const [isOverlayOpen, setIsOverlayOpen] = useState(true);
   const [isFormPopupOpen, setIsFormPopupOpen] = useState(false);
   const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false);
@@ -28,8 +41,6 @@ const App = () => {
 
   const [confirmTitle, setConfirmTitle] = useState('');
   const [selectedEventId, setSelectedEventId] = useState('');
-
-  const [isAdmin, setIsAdmin] = useState(false);
 
   const overlayClick = () => {
     setIsFormPopupOpen(false);
@@ -39,35 +50,36 @@ const App = () => {
   };
 
   return (
-    <Provider store={store}>
-      <Context.Provider value={{
-        server,
-        isAdmin,
-        setIsAdmin,
-        isFormPopupOpen,
-        setIsFormPopupOpen,
-        setIsOverlayOpen,
-        isConfirmPopupOpen,
-        setIsConfirmPopupOpen,
-        confirmTitle,
-        setConfirmTitle,
-        selectedEventId,
-        setSelectedEventId,
-        setIsErrorPopupOpen,
-      }}
-      >
-        <div className="App">
-          <div className="wrapper">
-            <Main />
-          </div>
-          <ErrorPopup isErrorPopupOpen={isErrorPopupOpen} />
-          <FormPopup />
-          <ConfirmationPopup />
-          <LoginPopup setIsOverlayOpen={setIsOverlayOpen} />
-          <div className={`overlay ${isOverlayOpen ? 'overlay_active' : undefined}`} onClick={isAdmin ? overlayClick : undefined} aria-hidden="true" />
+    <Context.Provider value={{
+      server,
+      isFormPopupOpen,
+      setIsFormPopupOpen,
+      setIsOverlayOpen,
+      isConfirmPopupOpen,
+      setIsConfirmPopupOpen,
+      confirmTitle,
+      setConfirmTitle,
+      selectedEventId,
+      setSelectedEventId,
+      setIsErrorPopupOpen,
+      timesArr,
+      daysArr,
+      users,
+      VALID_LENGTH,
+      colors,
+    }}
+    >
+      <div className="App">
+        <div className="wrapper">
+          <Main />
         </div>
-      </Context.Provider>
-    </Provider>
+        <ErrorPopup isErrorPopupOpen={isErrorPopupOpen} />
+        <FormPopup />
+        <ConfirmationPopup />
+        <LoginPopup />
+        <div className={`overlay ${isOverlayOpen ? 'overlay_active' : undefined}`} onClick={isAdmin ? overlayClick : undefined} aria-hidden="true" />
+      </div>
+    </Context.Provider>
   );
 };
 

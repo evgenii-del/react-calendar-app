@@ -2,7 +2,7 @@ import {
   GET_CALENDAR_DATA_STARTED,
   GET_CALENDAR_DATA_SUCCESS,
   GET_CALENDAR_DATA_FAILURE,
-  SET_IS_ADMIN,
+  SET_USER,
 } from './actions';
 
 const initialState = {
@@ -11,7 +11,11 @@ const initialState = {
     isLoading: false,
     error: null,
   },
-  isAdmin: false,
+  user: {
+    id: 0,
+    name: '',
+    isAdmin: false,
+  },
 };
 
 const calendarReducer = (state = initialState, action) => {
@@ -43,10 +47,10 @@ const calendarReducer = (state = initialState, action) => {
           error: null,
         },
       };
-    case SET_IS_ADMIN:
+    case SET_USER:
       return {
         ...state,
-        isAdmin: action.payload.error,
+        user: action.payload,
       };
     default:
       return state;

@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
-const DayList = () => (
-  <ol className="app__days days">
-    <li className="days__item">Mon</li>
-    <li className="days__item">Tue</li>
-    <li className="days__item">Wed</li>
-    <li className="days__item">Thu</li>
-    <li className="days__item">Fri</li>
-  </ol>
-);
+import Context from '../context';
+
+const DayList = () => {
+  const { daysArr } = useContext(Context);
+  return (
+    <ol className="app__days days">
+      {daysArr.map((item) => {
+        const day = item.slice(0, 3);
+        return <li className="days__item" key={day}>{day}</li>;
+      })}
+    </ol>
+  );
+};
 
 export default DayList;

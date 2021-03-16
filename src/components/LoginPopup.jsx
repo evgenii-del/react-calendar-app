@@ -1,42 +1,32 @@
-import React, { useState, useRef, useContext } from 'react';
+import React, { useState, useContext } from 'react';
+import { useDispatch } from 'react-redux';
 
-import User from '../utils/user';
-import Admin from '../utils/admin';
+import { setUser } from '../store/actions';
 import Context from '../context';
 
-const userNames = ['John', 'Sam', 'Ann', 'Thomas'];
-const users = [
-  ...userNames.map((name, index) => new User(index + 1, name)),
-  new Admin(5, 'Eve'),
-];
-
-const LoginPopup = (props) => {
-  const { setIsOverlayOpen } = props;
-  const { setIsAdmin } = useContext(Context);
+const LoginPopup = () => {
+  const dispatch = useDispatch();
+  const { users, setIsOverlayOpen } = useContext(Context);
   const [selectedUser, setSelectedUser] = useState('1');
-  const loginPopup = useRef();
+  const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(true);
 
   const handleChangeUser = ({ target }) => {
     setSelectedUser(target.value);
   };
 
   const handleOnClick = () => {
-    const isAdminParam = users.find(({ id }) => id === +selectedUser).isAdmin;
-    setIsAdmin(isAdminParam);
+    const user = users.find(({ id }) => id === +selectedUser);
+    dispatch(setUser(user));
     setIsOverlayOpen(false);
-    loginPopup.current.classList.remove('popup_active');
+    setIsLoginPopupOpen(false);
   };
 
   return (
-    <form className="popup popup_active" ref={loginPopup}>
+    <form className={`popup ${isLoginPopupOpen ? 'popup_active' : undefined}`}>
       <label htmlFor="loginMembers">
         <div className="select app__header-select">
           <select className="select__inner js-auth-select" name="loginMembers" value={selectedUser} onChange={handleChangeUser}>
-            <option value="1" defaultValue>John</option>
-            <option value="2">Sam</option>
-            <option value="3">Ann</option>
-            <option value="4">Thomas</option>
-            <option value="5">Eve</option>
+            {users.map((user) => <option value={user.id} key={user.id}>{user.name}</option>)}
           </select>
         </div>
         <button className="popup__btn" type="button" onClick={handleOnClick}>Confirm</button>
