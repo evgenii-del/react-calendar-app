@@ -1,4 +1,6 @@
 import React, { useState, useCallback } from 'react';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 
 import {
   ConfirmationPopup,
@@ -9,6 +11,13 @@ import {
 } from './components';
 import Context from './context';
 import Server from './utils/server';
+import calendarReducer from './store/reducers';
+
+const store = createStore(
+  calendarReducer,
+  // eslint-disable-next-line no-underscore-dangle
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+);
 
 const App = () => {
   const server = new Server('http://158.101.166.74:8080/api/data/', 'evgenii_khasanov', 'events');
@@ -39,35 +48,37 @@ const App = () => {
   };
 
   return (
-    <Context.Provider value={{
-      server,
-      isAdmin,
-      setIsAdmin,
-      calendarData,
-      isFormPopupOpen,
-      setIsFormPopupOpen,
-      setIsOverlayOpen,
-      isConfirmPopupOpen,
-      setIsConfirmPopupOpen,
-      confirmTitle,
-      setConfirmTitle,
-      selectedEventId,
-      setSelectedEventId,
-      setIsErrorPopupOpen,
-      fetchCalendarData,
-    }}
-    >
-      <div className="App">
-        <div className="wrapper">
-          <Main />
+    <Provider store={store}>
+      <Context.Provider value={{
+        server,
+        isAdmin,
+        setIsAdmin,
+        calendarData,
+        isFormPopupOpen,
+        setIsFormPopupOpen,
+        setIsOverlayOpen,
+        isConfirmPopupOpen,
+        setIsConfirmPopupOpen,
+        confirmTitle,
+        setConfirmTitle,
+        selectedEventId,
+        setSelectedEventId,
+        setIsErrorPopupOpen,
+        fetchCalendarData,
+      }}
+      >
+        <div className="App">
+          <div className="wrapper">
+            <Main />
+          </div>
+          <ErrorPopup isErrorPopupOpen={isErrorPopupOpen} />
+          <FormPopup />
+          <ConfirmationPopup />
+          <LoginPopup setIsOverlayOpen={setIsOverlayOpen} />
+          <div className={`overlay ${isOverlayOpen ? 'overlay_active' : undefined}`} onClick={isAdmin ? overlayClick : undefined} aria-hidden="true" />
         </div>
-        <ErrorPopup isErrorPopupOpen={isErrorPopupOpen} />
-        <FormPopup />
-        <ConfirmationPopup />
-        <LoginPopup setIsOverlayOpen={setIsOverlayOpen} />
-        <div className={`overlay ${isOverlayOpen ? 'overlay_active' : undefined}`} onClick={isAdmin ? overlayClick : undefined} aria-hidden="true" />
-      </div>
-    </Context.Provider>
+      </Context.Provider>
+    </Provider>
   );
 };
 
