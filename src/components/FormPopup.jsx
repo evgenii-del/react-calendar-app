@@ -5,7 +5,14 @@ import Context from '../context';
 import { getCalendarData } from '../store/actions';
 
 const FormPopup = React.memo(() => {
-  const calendarData = useSelector((state) => state.calendar.data);
+  const {
+    calendar,
+    VALID_LENGTH,
+    timesArr,
+    users,
+    daysArr,
+    colors,
+  } = useSelector((state) => state);
   const dispatch = useDispatch();
   const {
     server,
@@ -13,11 +20,6 @@ const FormPopup = React.memo(() => {
     setIsFormPopupOpen,
     setIsOverlayOpen,
     setIsErrorPopupOpen,
-    VALID_LENGTH,
-    timesArr,
-    users,
-    daysArr,
-    colors,
   } = useContext(Context);
   const [title, setTitle] = useState('');
   const [titleError, setTitleError] = useState(true);
@@ -51,7 +53,7 @@ const FormPopup = React.memo(() => {
   };
 
   const dateValidation = (date) => {
-    const isReservedDate = calendarData.filter((event) => event.data.date === date);
+    const isReservedDate = calendar.data.filter((event) => event.data.date === date);
     setDateError(!!isReservedDate.length);
   };
 
@@ -107,7 +109,7 @@ const FormPopup = React.memo(() => {
   useEffect(() => {
     const date = `${time}-${day}`;
     dateValidation(date);
-  }, [calendarData]);
+  }, [calendar.data]);
 
   return (
     <form className={`popup ${isFormPopupOpen ? 'popup_active' : undefined}`} onSubmit={handleSubmitForm}>
@@ -154,23 +156,21 @@ const FormPopup = React.memo(() => {
         </div>
       </label>
       <ul className="popup__colors">
-        {
-          colors.map(({ name, id }) => (
-            <li className="popup__colors-item" key={id}>
-              <label className="check option">
-                <input
-                  className="check__input visually-hidden"
-                  value={name}
-                  type="radio"
-                  name="color"
-                  checked={color === name}
-                  onChange={handleChangeColor}
-                />
-                <span className={`check__box ${name}`} />
-              </label>
-            </li>
-          ))
-        }
+        {colors.map(({ name, id }) => (
+          <li className="popup__colors-item" key={id}>
+            <label className="check option">
+              <input
+                className="check__input visually-hidden"
+                value={name}
+                type="radio"
+                name="color"
+                checked={color === name}
+                onChange={handleChangeColor}
+              />
+              <span className={`check__box ${name}`} />
+            </label>
+          </li>
+        ))}
       </ul>
       <button className="popup__btn" type="submit">Create</button>
     </form>

@@ -5,20 +5,22 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { DayList, TimeList } from './index';
 import Context from '../context';
-import { getCalendarData } from '../store/actions';
+import { selectEvent, getCalendarData } from '../store/actions';
 import HeaderButtons from './HeaderButtons';
 
 const Main = () => {
-  const { calendar, user } = useSelector((state) => state);
-  const dispatch = useDispatch();
   const {
+    calendar,
+    user,
+    users,
     timesArr,
     daysArr,
+  } = useSelector((state) => state);
+  const dispatch = useDispatch();
+  const {
     setIsFormPopupOpen,
     setIsOverlayOpen,
     setIsConfirmPopupOpen,
-    setConfirmTitle,
-    setSelectedEventId,
   } = useContext(Context);
   const [selectedMember, setSelectedMember] = useState('all');
 
@@ -27,12 +29,11 @@ const Main = () => {
     setIsOverlayOpen(true);
   };
 
-  const selectEvent = ({ target }) => {
+  const handleSelectEvent = ({ target }) => {
     if (target.classList.contains('reserved')) {
       const event = calendar.data.find((item) => item.data.date === target.dataset.id);
 
-      setConfirmTitle(event.data.title);
-      setSelectedEventId(event.id);
+      dispatch(selectEvent(event));
 
       setIsConfirmPopupOpen(true);
       setIsOverlayOpen(true);
@@ -59,7 +60,7 @@ const Main = () => {
             className={`calendar__item ${color} ${user.isAdmin ? 'reserved' : ''}`}
             data-id={date}
             key={fullDate}
-            onClick={selectEvent}
+            onClick={handleSelectEvent}
             aria-hidden="true"
           >
             <p className="calendar__item-text">{title}</p>
@@ -81,6 +82,7 @@ const Main = () => {
         <h1 className="app__header-title">Calendar</h1>
         {user.isAdmin && (
         <HeaderButtons
+          users={users}
           selectedMember={selectedMember}
           handleChangeMember={handleChangeMember}
           handleOpenPopup={handleOpenPopup}

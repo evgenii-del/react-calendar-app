@@ -1,9 +1,8 @@
-import React, { useContext } from 'react';
-
-import Context from '../context';
+import React from 'react';
+import { useSelector } from 'react-redux';
 
 const DayList = () => {
-  const { daysArr } = useContext(Context);
+  const { daysArr } = useSelector((state) => state);
   return (
     <ol className="app__days days">
       {daysArr.map((item) => {

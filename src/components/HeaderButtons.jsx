@@ -1,7 +1,9 @@
 import React from 'react';
 
 const HeaderButtons = (props) => {
-  const { selectedMember, handleChangeMember, handleOpenPopup } = props;
+  const {
+    selectedMember, handleChangeMember, handleOpenPopup, users,
+  } = props;
   return (
     <div className="app__header-buttons">
       <label htmlFor="filterByMembers">
@@ -13,11 +15,7 @@ const HeaderButtons = (props) => {
             onChange={handleChangeMember}
           >
             <option value="all">All members</option>
-            <option value="1">John</option>
-            <option value="2">Sam</option>
-            <option value="3">Ann</option>
-            <option value="4">Thomas</option>
-            <option value="5">Eve</option>
+            {users.map((user) => <option value={user.id} key={user.id}>{user.name}</option>)}
           </select>
         </div>
       </label>

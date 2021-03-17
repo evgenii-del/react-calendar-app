@@ -9,26 +9,7 @@ import {
   Main,
 } from './components';
 import Context from './context';
-import Server from './utils/server';
-import User from './utils/user';
-import Admin from './utils/admin';
-
-const timesArr = [10, 11, 12, 13, 14, 15, 16, 17, 18];
-const daysArr = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
-const userNames = ['John', 'Sam', 'Ann', 'Thomas'];
-const users = [
-  ...userNames.map((name, index) => new User(index + 1, name)),
-  new Admin(5, 'Eve (Admin)'),
-];
-const VALID_LENGTH = 3;
-const colors = [
-  { name: 'yellow', id: 1 },
-  { name: 'green', id: 2 },
-  { name: 'red', id: 3 },
-  { name: 'khaki', id: 4 },
-  { name: 'violet', id: 5 },
-  { name: 'blue', id: 6 },
-];
+import { Server } from './utils';
 
 const App = () => {
   const user = useSelector((state) => state.user);
@@ -38,9 +19,6 @@ const App = () => {
   const [isFormPopupOpen, setIsFormPopupOpen] = useState(false);
   const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false);
   const [isErrorPopupOpen, setIsErrorPopupOpen] = useState(false);
-
-  const [confirmTitle, setConfirmTitle] = useState('');
-  const [selectedEventId, setSelectedEventId] = useState('');
 
   const overlayClick = () => {
     setIsFormPopupOpen(false);
@@ -57,16 +35,7 @@ const App = () => {
       setIsOverlayOpen,
       isConfirmPopupOpen,
       setIsConfirmPopupOpen,
-      confirmTitle,
-      setConfirmTitle,
-      selectedEventId,
-      setSelectedEventId,
       setIsErrorPopupOpen,
-      timesArr,
-      daysArr,
-      users,
-      VALID_LENGTH,
-      colors,
     }}
     >
       <div className="App">
@@ -77,7 +46,11 @@ const App = () => {
         <FormPopup />
         <ConfirmationPopup />
         <LoginPopup />
-        <div className={`overlay ${isOverlayOpen ? 'overlay_active' : undefined}`} onClick={user.isAdmin ? overlayClick : undefined} aria-hidden="true" />
+        <div
+          className={`overlay ${isOverlayOpen ? 'overlay_active' : undefined}`}
+          onClick={user.isAdmin ? overlayClick : undefined}
+          aria-hidden="true"
+        />
       </div>
     </Context.Provider>
   );
