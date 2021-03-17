@@ -1,10 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import Context from '../context';
 import { getCalendarData } from '../store/actions';
 
-const ConfirmationPopup = React.memo(() => {
+const ConfirmationPopup = React.memo((props) => {
   const { id, data } = useSelector((state) => state.selectedEvent);
   const dispatch = useDispatch();
   const {
@@ -12,7 +11,7 @@ const ConfirmationPopup = React.memo(() => {
     isConfirmPopupOpen,
     setIsConfirmPopupOpen,
     setIsOverlayOpen,
-  } = useContext(Context);
+  } = props;
 
   const handleClosePopup = () => {
     setIsConfirmPopupOpen(false);

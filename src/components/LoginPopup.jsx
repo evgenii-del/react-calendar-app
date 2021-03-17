@@ -1,13 +1,12 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { setUser } from '../store/actions';
-import Context from '../context';
 
-const LoginPopup = () => {
+const LoginPopup = (props) => {
   const dispatch = useDispatch();
   const { users } = useSelector((state) => state);
-  const { setIsOverlayOpen } = useContext(Context);
+  const { setIsOverlayOpen } = props;
   const [selectedUser, setSelectedUser] = useState('1');
   const [isLoginPopupOpen, setIsLoginPopupOpen] = useState(true);
 

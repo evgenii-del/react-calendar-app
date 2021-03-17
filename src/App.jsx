@@ -8,7 +8,6 @@ import {
   LoginPopup,
   Main,
 } from './components';
-import Context from './context';
 import { Server } from './utils';
 
 const App = () => {
@@ -28,31 +27,35 @@ const App = () => {
   };
 
   return (
-    <Context.Provider value={{
-      server,
-      isFormPopupOpen,
-      setIsFormPopupOpen,
-      setIsOverlayOpen,
-      isConfirmPopupOpen,
-      setIsConfirmPopupOpen,
-      setIsErrorPopupOpen,
-    }}
-    >
-      <div className="App">
-        <div className="wrapper">
-          <Main />
-        </div>
-        <ErrorPopup isErrorPopupOpen={isErrorPopupOpen} />
-        <FormPopup />
-        <ConfirmationPopup />
-        <LoginPopup />
-        <div
-          className={`overlay ${isOverlayOpen ? 'overlay_active' : undefined}`}
-          onClick={user.isAdmin ? overlayClick : undefined}
-          aria-hidden="true"
+    <div className="App">
+      <div className="wrapper">
+        <Main
+          setIsFormPopupOpen={setIsFormPopupOpen}
+          setIsOverlayOpen={setIsOverlayOpen}
+          setIsConfirmPopupOpen={setIsConfirmPopupOpen}
         />
       </div>
-    </Context.Provider>
+      <ErrorPopup isErrorPopupOpen={isErrorPopupOpen} />
+      <FormPopup
+        server={server}
+        isFormPopupOpen={isFormPopupOpen}
+        setIsFormPopupOpen={setIsFormPopupOpen}
+        setIsOverlayOpen={setIsOverlayOpen}
+        setIsErrorPopupOpen={setIsErrorPopupOpen}
+      />
+      <ConfirmationPopup
+        server={server}
+        isConfirmPopupOpen={isConfirmPopupOpen}
+        setIsConfirmPopupOpen={setIsConfirmPopupOpen}
+        setIsOverlayOpen={setIsOverlayOpen}
+      />
+      <LoginPopup setIsOverlayOpen={setIsOverlayOpen} />
+      <div
+        className={`overlay ${isOverlayOpen ? 'overlay_active' : undefined}`}
+        onClick={user.isAdmin ? overlayClick : undefined}
+        aria-hidden="true"
+      />
+    </div>
   );
 };
 

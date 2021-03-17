@@ -1,14 +1,13 @@
 import React, {
-  useEffect, useState, useContext, useMemo,
+  useEffect, useState, useMemo,
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { DayList, TimeList } from './index';
-import Context from '../context';
 import { selectEvent, getCalendarData } from '../store/actions';
 import HeaderButtons from './HeaderButtons';
 
-const Main = () => {
+const Main = (props) => {
   const {
     calendar,
     user,
@@ -21,7 +20,7 @@ const Main = () => {
     setIsFormPopupOpen,
     setIsOverlayOpen,
     setIsConfirmPopupOpen,
-  } = useContext(Context);
+  } = props;
   const [selectedMember, setSelectedMember] = useState('all');
 
   const handleOpenPopup = () => {

@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import Context from '../context';
 import { getCalendarData } from '../store/actions';
 
-const FormPopup = React.memo(() => {
+const FormPopup = React.memo((props) => {
   const {
     calendar,
     VALID_LENGTH,
@@ -20,7 +19,7 @@ const FormPopup = React.memo(() => {
     setIsFormPopupOpen,
     setIsOverlayOpen,
     setIsErrorPopupOpen,
-  } = useContext(Context);
+  } = props;
   const [title, setTitle] = useState('');
   const [titleError, setTitleError] = useState(true);
   const [participants, setParticipants] = useState([]);
