@@ -31,7 +31,7 @@ const colors = [
 ];
 
 const App = () => {
-  const { isAdmin } = useSelector((state) => state.user.isAdmin);
+  const user = useSelector((state) => state.user);
   const server = new Server('http://158.101.166.74:8080/api/data/', 'evgenii_khasanov', 'events');
 
   const [isOverlayOpen, setIsOverlayOpen] = useState(true);
@@ -77,7 +77,7 @@ const App = () => {
         <FormPopup />
         <ConfirmationPopup />
         <LoginPopup />
-        <div className={`overlay ${isOverlayOpen ? 'overlay_active' : undefined}`} onClick={isAdmin ? overlayClick : undefined} aria-hidden="true" />
+        <div className={`overlay ${isOverlayOpen ? 'overlay_active' : undefined}`} onClick={user.isAdmin ? overlayClick : undefined} aria-hidden="true" />
       </div>
     </Context.Provider>
   );
