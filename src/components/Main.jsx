@@ -66,7 +66,7 @@ const Main = (props) => {
       } = event.data;
       const isAllOrSomeoneSelected = selectedMember === 'all' || participants.includes(selectedMember);
 
-      if ((user.isAdmin && isAllOrSomeoneSelected) || participants.includes(`${user.id}`)) {
+      if ((user.isAdmin && isAllOrSomeoneSelected) || (!user.isAdmin && participants.includes(`${user.id}`))) {
         return renderEvent(color, date, fullDate, title);
       }
     }
