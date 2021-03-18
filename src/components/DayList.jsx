@@ -1,13 +1,16 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
-const DayList = () => (
-  <ol className="app__days days">
-    <li className="days__item">Mon</li>
-    <li className="days__item">Tue</li>
-    <li className="days__item">Wed</li>
-    <li className="days__item">Thu</li>
-    <li className="days__item">Fri</li>
-  </ol>
-);
+const DayList = () => {
+  const { daysArr } = useSelector((state) => state);
+  return (
+    <ol className="app__days days">
+      {daysArr.map((item) => {
+        const day = item.slice(0, 3);
+        return <li className="days__item" key={day}>{day}</li>;
+      })}
+    </ol>
+  );
+};
 
 export default DayList;

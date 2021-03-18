@@ -1,17 +1,17 @@
-import React, { useContext } from 'react';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import Context from '../context';
+import { getCalendarData } from '../store/actions';
 
-const ConfirmationPopup = React.memo(() => {
+const ConfirmationPopup = React.memo((props) => {
+  const { id, data } = useSelector((state) => state.selectedEvent);
+  const dispatch = useDispatch();
   const {
     server,
     isConfirmPopupOpen,
     setIsConfirmPopupOpen,
-    confirmTitle,
-    selectedEventId,
     setIsOverlayOpen,
-    fetchCalendarData,
-  } = useContext(Context);
+  } = props;
 
   const handleClosePopup = () => {
     setIsConfirmPopupOpen(false);
@@ -19,9 +19,9 @@ const ConfirmationPopup = React.memo(() => {
   };
 
   const handleDeleteEvent = () => {
-    server.removeEvent(selectedEventId).then(() => {
+    server.removeEvent(id).then(() => {
       handleClosePopup();
-      fetchCalendarData();
+      dispatch(getCalendarData());
     });
   };
 
@@ -31,7 +31,7 @@ const ConfirmationPopup = React.memo(() => {
       <p className="popup__text">
         Are you sure you want to delete
         &quot;
-        {confirmTitle}
+        {data && data.title}
         &quot;
         event?
       </p>
