@@ -31,7 +31,7 @@ const calendarReducer = (state, action) => {
         calendar: {
           ...state.calendar,
           isLoading: false,
-          error: null,
+          error: action.payload.error,
         },
       };
     case SET_USER:

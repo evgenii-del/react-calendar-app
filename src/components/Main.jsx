@@ -43,6 +43,18 @@ const Main = (props) => {
     setSelectedMember(target.value);
   };
 
+  const renderEvent = (color, date, fullDate, title) => (
+    <div
+      className={`calendar__item ${color} ${user.isAdmin ? 'reserved' : ''}`}
+      data-id={date}
+      key={fullDate}
+      onClick={handleSelectEvent}
+      aria-hidden="true"
+    >
+      <p className="calendar__item-text">{title}</p>
+    </div>
+  );
+
   const renderEvents = useMemo(() => timesArr.map((time) => daysArr.map((day) => {
     const fullDate = `${time}-${day}`;
     const event = calendar.data
@@ -52,22 +64,12 @@ const Main = (props) => {
       const {
         color, date, title, participants,
       } = event.data;
+      const isAllOrSomeoneSelected = selectedMember === 'all' || participants.includes(selectedMember);
 
-      if (selectedMember === 'all' || participants.includes(selectedMember)) {
-        return (
-          <div
-            className={`calendar__item ${color} ${user.isAdmin ? 'reserved' : ''}`}
-            data-id={date}
-            key={fullDate}
-            onClick={handleSelectEvent}
-            aria-hidden="true"
-          >
-            <p className="calendar__item-text">{title}</p>
-          </div>
-        );
+      if ((user.isAdmin && isAllOrSomeoneSelected) || participants.includes(`${user.id}`)) {
+        return renderEvent(color, date, fullDate, title);
       }
     }
-
     return <div className="calendar__item" key={fullDate} />;
   })), [calendar.data, selectedMember, user.isAdmin]);
 

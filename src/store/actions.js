@@ -27,7 +27,8 @@ export const getCalendarData = () => (dispatch) => {
 
   server.fetchEvents()
     .then(({ data }) => {
-      const parsedData = data.map((item) => ({ id: item.id, data: JSON.parse(item.data) }));
+      const parsedData = data
+        ? data.map((item) => ({ id: item.id, data: JSON.parse(item.data) })) : [];
       dispatch(getCalendarDataSuccess(parsedData));
     })
     .catch((error) => dispatch(getCalendarDataFailure(error)));
